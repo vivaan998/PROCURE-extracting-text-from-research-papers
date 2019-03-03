@@ -1,0 +1,27 @@
+import pdfplumber
+import re
+from collections import OrderedDict
+pdf = pdfplumber.open("C:\\Users\\Hp\\Desktop\\python\\hi.pdf")
+
+p0 = pdf.pages[0]
+im = p0.to_image()
+im
+im.reset().draw_rects(p0.chars)
+
+text = p0.extract_text()
+print (text)
+core_pat = re.compile(r"LOCATION[\-\s]+(.*)\n\s+Flags = e", re.DOTALL)
+    core = re.search(core_pat, text)
+    core1 = core.group(1)
+    print(core1)
+    
+lines = core1.split("\n")
+line_groups = list(zip(lines[::], lines[::]))
+print(line_groups[0])
+
+parsed = [ parse_row(first_line, second_line) 
+    for first_line, second_line in line_groups ]
+    parsed[:3]
+  import pandas as pd
+columns = list(parsed[0].keys())
+pd.DataFrame(parsed)[columns]
